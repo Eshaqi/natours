@@ -41,7 +41,12 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: [],
-      connectSrc: ["'self'", ...connectSrcUrls, 'https://api.stripe.com'],
+      connectSrc: [
+        "'self'",
+        ...connectSrcUrls,
+        'https://api.stripe.com',
+        'wss://natours-api-riyx.onrender.com:1234',
+      ],
       scriptSrc: ["'self'", 'https://js.stripe.com', ...scriptSrcUrls],
       styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
       workerSrc: ["'self'", 'blob:'],
