@@ -111,7 +111,6 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  // console.log(decoded);
 
   //3) Check if user still exists
   const currentUser = await User.findById(decoded.id);
@@ -149,7 +148,6 @@ exports.isLoggedIn = async (req, res, next) => {
         req.cookies.jwt,
         process.env.JWT_SECRET,
       );
-      // console.log(decoded);
 
       //2) Check if user still exists
       const currentUser = await User.findById(decoded.id);
@@ -206,7 +204,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   //3) Send it to user's email
 
- /* const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+  /* const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
 
  const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you did not forget yoour password, please ignore this email`;*/
 

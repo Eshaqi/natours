@@ -135,26 +135,10 @@ tourSchema.virtual('reviews', {
 
 //DOCUMNET MIDDLEWARE: runs before .save() and . create()
 tourSchema.pre('save', function (next) {
-  // console.log(this);
   this.slug = slugify(this.name, { lower: true });
 
   next();
 });
-
-//Embeded user into tour collection
-/* tourSchema.pre('save', async function (next) {
-  const guidesPromises = this.guides.map(async (id) => await User.findById(id));
-  this.guides = await Promise.all(guidesPromises);
-
-  next();
-}); */
-
-/* tourSchema.post('save', function (doc, next) {
-  console.log(doc);
-
-  next();
-  
-}); */
 
 // QUERY MIDDLEWARE
 tourSchema.pre(/^find/, function (next) {
@@ -171,22 +155,6 @@ tourSchema.pre(/^find/, function (next) {
   });
   next();
 });
-/* 
-tourSchema.post(/^find/, function (docs, next) {
-  console.log(`Query took ${Date.now() - this.start} milliseconds!`);
-
-  console.log(docs);
-
-  next();
-}); */
-
-//AGGREGATION MIDDLEWARE
-/* tourSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  // console.log(this.pipeline);
-
-  next();
-}); */
 
 const Tour = mongoose.model('Tour', tourSchema);
 

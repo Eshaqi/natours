@@ -1,114 +1,178 @@
-const path = require('path');
-const express = require('express');
-const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
-const hpp = require('hpp');
-const cookieParser = require('cookie-parser');
+require("@babel/polyfill");
+var $knI9B$axios = require("axios");
 
-const AppError = require('./utils/appError');
-const globalErrorHandler = require('./controllers/errorController');
-const tourRouter = require('./routes/tourRoutes');
-const userRouter = require('./routes/userRoutes');
-const reviewRouter = require('./routes/reviewRoutes');
-const bookingRouter = require('./routes/bookingRoutes');
-const viewRouter = require('./routes/viewRoutes');
 
-const app = express();
-
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
-
-// 1) GLOBAL MIDDLEWARES
-// Serving static files
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Set security HTTP headers
-const scriptSrcUrls = ['https://unpkg.com/', 'https://tile.openstreetmap.org'];
-const styleSrcUrls = [
-  'https://unpkg.com/',
-  'https://tile.openstreetmap.org',
-  'https://fonts.googleapis.com/',
-];
-const connectSrcUrls = ['https://unpkg.com', 'https://tile.openstreetmap.org'];
-const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
-
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: [],
-      connectSrc: ["'self'", ...connectSrcUrls, 'https://api.stripe.com'],
-      scriptSrc: ["'self'", 'https://js.stripe.com', ...scriptSrcUrls],
-      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-      workerSrc: ["'self'", 'blob:'],
-      objectSrc: [],
-      imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
-      fontSrc: ["'self'", ...fontSrcUrls],
-      frameSrc: ["'self'", 'https://js.stripe.com'],
-    },
-  }),
-);
-// app.use(helmet());
-
-// Development logging
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
+function $parcel$interopDefault(a) {
+  return a && a.__esModule ? a.default : a;
 }
 
-// Limit requests from same API
-const limiter = rateLimit({
-  max: 100,
-  windowMs: 60 * 60 * 1000,
-  message: 'Too many requests from this IP, please try again in an hour!',
+/* eslint-disable */ const $57343aa7f3ab0fd6$export$4c5dd147b21b9176 = (locations)=>{
+    var map = L.map('map', {
+        zoomControl: false
+    });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    const points = [];
+    locations.forEach((loc)=>{
+        points.push([
+            loc.coordinates[1],
+            loc.coordinates[0]
+        ]);
+        L.marker([
+            loc.coordinates[1],
+            loc.coordinates[0]
+        ]).addTo(map).bindPopup(`<p>Day ${loc.day}: ${loc.description}</p>`, {
+            autoClose: false
+        }).openPopup();
+    });
+    const bounds = L.latLngBounds(points).pad(0.5);
+    map.fitBounds(bounds);
+    map.scrollWheelZoom.disable();
+};
+
+
+/* eslint-disable */ 
+/* eslint-disable */ const $c67cb762f0198593$export$516836c6a9dfc573 = ()=>{
+    const el = document.querySelector('.alert');
+    if (el) el.parentElement.removeChild(el);
+};
+const $c67cb762f0198593$export$de026b00723010c1 = (type, msg)=>{
+    $c67cb762f0198593$export$516836c6a9dfc573();
+    const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
+    window.setTimeout($c67cb762f0198593$export$516836c6a9dfc573, 5000);
+};
+
+
+const $70af9284e599e604$export$596d806903d1f59e = async (email, password)=>{
+    try {
+        const res = await (0, ($parcel$interopDefault($knI9B$axios)))({
+            method: 'POST',
+            url: '/api/v1/users/login',
+            data: {
+                email: email,
+                password: password
+            }
+        });
+        if (res.data.status === 'success') {
+            (0, $c67cb762f0198593$export$de026b00723010c1)('success', 'Logged in successfully!');
+            window.setTimeout(()=>{
+                location.assign('/');
+            }, 1500);
+        }
+    } catch (err) {
+        (0, $c67cb762f0198593$export$de026b00723010c1)('error', err.response.data.message);
+    }
+};
+const $70af9284e599e604$export$a0973bcfe11b05c9 = async ()=>{
+    try {
+        const res = await (0, ($parcel$interopDefault($knI9B$axios)))({
+            method: 'GET',
+            url: '/api/v1/users/logout'
+        });
+        res.data.status = 'success';
+        location.reload(true);
+        location.assign('/');
+    } catch (err) {
+        console.log(err.response);
+        (0, $c67cb762f0198593$export$de026b00723010c1)('error', 'Error logging out! Try again.');
+    }
+};
+
+
+/* eslint-disable */ 
+
+const $936fcc27ffb6bbb1$export$f558026a994b6051 = async (data, type)=>{
+    try {
+        const url = type === 'password' ? '/api/v1/users/updateMyPassword' : '/api/v1/users/updateMe';
+        const res = await (0, ($parcel$interopDefault($knI9B$axios)))({
+            method: 'PATCH',
+            url: url,
+            data: data
+        });
+        if (res.data.status === 'success') {
+            (0, $c67cb762f0198593$export$de026b00723010c1)('success', `${type.toUpperCase()} updated successfully!`);
+            // location.reload();
+            window.setTimeout(()=>{
+                location.reload();
+            }, 1000);
+        }
+    } catch (err) {
+        (0, $c67cb762f0198593$export$de026b00723010c1)('error', err.response.data.message);
+    }
+};
+
+
+/* eslint-disable */ 
+
+const $6710bca62beba915$var$stripe = Stripe('pk_test_51QwwdZKOtqWbbHoHPVZfXnTJqIdLIJmlLgNZpYTqojaI35jfazr7uxX5IT2kew4ROs6IT108oLYorcMAVS3JzVs700P5O36mK8');
+const $6710bca62beba915$export$8d5bdbf26681c0c2 = async (tourId)=>{
+    try {
+        // 1) Get checkout session from API
+        const session = await (0, ($parcel$interopDefault($knI9B$axios)))(`/api/v1/bookings/checkout-session/${tourId}`);
+        console.log(session);
+        // 2) Create checkout form + chanre credit card
+        await $6710bca62beba915$var$stripe.redirectToCheckout({
+            sessionId: session.data.session.id
+        });
+    } catch (err) {
+        console.log(err);
+        (0, $c67cb762f0198593$export$de026b00723010c1)('error', err);
+    }
+};
+
+
+//DOM elements
+const $d0f7ce18c37ad6f6$var$mapBox = document.getElementById('map');
+const $d0f7ce18c37ad6f6$var$loginForm = document.querySelector('.form--login');
+const $d0f7ce18c37ad6f6$var$logOutBtn = document.querySelector('.nav__el--logout');
+const $d0f7ce18c37ad6f6$var$userDataForm = document.querySelector('.form-user-data');
+const $d0f7ce18c37ad6f6$var$userPasswordForm = document.querySelector('.form-user-password');
+const $d0f7ce18c37ad6f6$var$bookBtn = document.getElementById('book-tour');
+//Delegation
+if ($d0f7ce18c37ad6f6$var$mapBox) {
+    const locations = JSON.parse($d0f7ce18c37ad6f6$var$mapBox.dataset.locations);
+    (0, $57343aa7f3ab0fd6$export$4c5dd147b21b9176)(locations);
+}
+if ($d0f7ce18c37ad6f6$var$loginForm) $d0f7ce18c37ad6f6$var$loginForm.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    (0, $70af9284e599e604$export$596d806903d1f59e)(email, password);
 });
-app.use('/api', limiter);
-
-// Body parser, reading data from body into req.body
-app.use(express.json({ limit: '10kb' }));
-app.use(express.urlencoded({ extended: true, limit: '10kb' }));
-app.use(express.urlencoded({ extended: true, limit: '10kb' }));
-app.use(cookieParser());
-
-// Data sanitization against NoSQL query injection
-app.use(mongoSanitize());
-
-// Data sanitization against XSS
-app.use(xss());
-
-// Prevent parameter pollution
-app.use(
-  hpp({
-    whitelist: [
-      'duration',
-      'ratingsQuantity',
-      'ratingsAverage',
-      'maxGroupSize',
-      'difficulty',
-      'price',
-    ],
-  }),
-);
-
-// Test middleware
-app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  // console.log(req.cookies);
-  next();
+if ($d0f7ce18c37ad6f6$var$logOutBtn) $d0f7ce18c37ad6f6$var$logOutBtn.addEventListener('click', (0, $70af9284e599e604$export$a0973bcfe11b05c9));
+if ($d0f7ce18c37ad6f6$var$userDataForm) $d0f7ce18c37ad6f6$var$userDataForm.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    // const name = document.getElementById('name').value;
+    // const email = document.getElementById('email').value;
+    (0, $936fcc27ffb6bbb1$export$f558026a994b6051)(form, 'data');
+});
+if ($d0f7ce18c37ad6f6$var$userPasswordForm) $d0f7ce18c37ad6f6$var$userPasswordForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    document.querySelector('.btn--save-password').textContent = 'Updating...';
+    const passwordCurrent = document.getElementById('password-current').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+    await (0, $936fcc27ffb6bbb1$export$f558026a994b6051)({
+        passwordCurrent: passwordCurrent,
+        password: password,
+        passwordConfirm: passwordConfirm
+    }, 'password');
+    document.querySelector('.btn--save-password').textContent = 'Save password';
+    document.getElementById('password-current').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('password-confirm').value = '';
+});
+if ($d0f7ce18c37ad6f6$var$bookBtn) $d0f7ce18c37ad6f6$var$bookBtn.addEventListener('click', (e)=>{
+    e.target.textContent = 'Processing...';
+    const { tourId: tourId } = e.target.dataset;
+    (0, $6710bca62beba915$export$8d5bdbf26681c0c2)(tourId);
 });
 
-// 3) ROUTES
-app.use('/', viewRouter);
-app.use('/api/v1/tours', tourRouter);
-app.use('/api/v1/users', userRouter);
-app.use('/api/v1/reviews', reviewRouter);
-app.use('/api/v1/bookings', bookingRouter);
 
-app.all('*', (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
-});
-
-app.use(globalErrorHandler);
-
-module.exports = app;
+//# sourceMappingURL=app.js.map
