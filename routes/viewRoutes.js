@@ -26,4 +26,8 @@ router.post(
   viewsController.updateUserData,
 );
 
+router.get('/health', (req, res) => {
+  res.status(200).json({ status: 'success', message: 'Server is running!' });
+});
+
 module.exports = router;
