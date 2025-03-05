@@ -9,11 +9,8 @@ process.on('uncaughtException', (err) => {
 });
 
 // const connectToDatabse = require('./db');
-const connectToDatabse = require('./mongooseConfig');
 
 const app = require('./app');
-
-connectToDatabse();
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
@@ -28,3 +25,6 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
   });
 });
+
+const connectToDatabse = require('./mongooseConfig');
+connectToDatabse();
