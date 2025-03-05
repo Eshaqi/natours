@@ -12,6 +12,8 @@ process.on('uncaughtException', (err) => {
 });
 
 // const connectToDatabse = require('./db');
+const connectToDatabse = require('./mongooseConfig');
+connectToDatabse();
 
 const port = process.env.PORT || 3000;
 
@@ -28,5 +30,9 @@ process.on('unhandledRejection', (err) => {
   });
 });
 
-const connectToDatabse = require('./mongooseConfig');
-connectToDatabse();
+process.on('SIGTERM', () => {
+  console.log('SIGTERM RECEIVED, Shutdown down gracefully');
+  server.close(() => {
+    console.log('💥 Process terminated');
+  });
+});
