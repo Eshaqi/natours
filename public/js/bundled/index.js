@@ -142,10 +142,10 @@
       this[globalName] = mainExports;
     }
   }
-})({"fsLyU":[function(require,module,exports,__globalThis) {
+})({"2dtHH":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
-var HMR_PORT = null;
+var HMR_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
 var HMR_USE_SSE = false;
@@ -12718,6 +12718,6 @@ const bookTour = async (tourId)=>{
     }
 };
 
-},{"axios":"jo6P5","./alert":"kxdiQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fsLyU","f2QDv"], "f2QDv", "parcelRequire94c2")
+},{"axios":"jo6P5","./alert":"kxdiQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2dtHH","f2QDv"], "f2QDv", "parcelRequire94c2")
 
 //# sourceMappingURL=index.js.map
