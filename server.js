@@ -11,7 +11,12 @@ process.on('uncaughtException', (err) => {
 
 // const connectToDatabse = require('./db');
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
+
+router.get('/health', (req, res) => {
+  res.status(200).json({ status: 'success', message: 'Server is running!' });
+});
+
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
