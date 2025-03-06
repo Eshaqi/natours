@@ -601,6 +601,7 @@ var _leaflet = require("./leaflet");
 var _login = require("./login");
 var _updateSettings = require("./updateSettings");
 var _stripe = require("./stripe");
+var _alert = require("./alert");
 //DOM elements
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
@@ -651,8 +652,10 @@ if (bookBtn) bookBtn.addEventListener('click', (e)=>{
     const { tourId } = e.target.dataset;
     (0, _stripe.bookTour)(tourId);
 });
+const alertMessage = document.querySelector('body').dataset.alert;
+if (alertMessage) (0, _alert.showAlert)('Success', alertMessage, 20);
 
-},{"@babel/polyfill":"dTCHC","./leaflet":"xvuTT","./login":"7yHem","./updateSettings":"l3cGY","./stripe":"10tSC"}],"dTCHC":[function(require,module,exports,__globalThis) {
+},{"@babel/polyfill":"dTCHC","./leaflet":"xvuTT","./login":"7yHem","./updateSettings":"l3cGY","./stripe":"10tSC","./alert":"kxdiQ"}],"dTCHC":[function(require,module,exports,__globalThis) {
 "use strict";
 require("f50de0aa433a589b");
 var _global = _interopRequireDefault(require("4142986752a079d4"));
@@ -12661,11 +12664,11 @@ const hideAlert = ()=>{
     const el = document.querySelector('.alert');
     if (el) el.parentElement.removeChild(el);
 };
-const showAlert = (type, msg)=>{
+const showAlert = (type, msg, time = 7)=>{
     hideAlert();
     const markup = `<div class="alert alert--${type}">${msg}</div>`;
     document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
-    window.setTimeout(hideAlert, 5000);
+    window.setTimeout(hideAlert, time * 1000);
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l3cGY":[function(require,module,exports,__globalThis) {
