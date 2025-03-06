@@ -9,8 +9,8 @@
     "dev": "nodemon server.js",
     "start:prod": "cross-env NODE_ENV=production node server.js",
     "debug": "ndb server.js",
-    "watch:js": "parcel serve ./public/js/index.js --dist-dir ./public/js/bundled",
-    "build:js": "parcel build ./public/js/index.js --dist-dir ./public/js/bundled"
+    "watch:js": "parcel serve ./public/js/index.js --dist-dir ./public/js/bundled --no-minify",
+    "build:js": "parcel build ./public/js/index.js --dist-dir ./public/js/bundled --no-scope-hoist"
   },
   "author": "AliReza",
   "license": "ISC",
