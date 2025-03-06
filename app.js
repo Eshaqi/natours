@@ -15,6 +15,7 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
+const bookingController = require('./controllers/bookingController');
 const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
@@ -52,27 +53,27 @@ const styleSrcUrls = [
 const connectSrcUrls = ['https://unpkg.com', 'https://tile.openstreetmap.org'];
 const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: [],
-      connectSrc: [
-        "'self'",
-        ...connectSrcUrls,
-        'https://api.stripe.com',
-        'wss://natours-api-riyx.onrender.com:1234',
-      ],
-      scriptSrc: ["'self'", 'https://js.stripe.com', ...scriptSrcUrls],
-      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-      workerSrc: ["'self'", 'blob:'],
-      objectSrc: [],
-      imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
-      fontSrc: ["'self'", ...fontSrcUrls],
-      frameSrc: ["'self'", 'https://js.stripe.com'],
-    },
-  }),
-);
-// app.use(helmet());
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       defaultSrc: [],
+//       connectSrc: [
+//         "'self'",
+//         ...connectSrcUrls,
+//         'https://api.stripe.com',
+//         'wss://natours-api-riyx.onrender.com:1234',
+//       ],
+//       scriptSrc: ["'self'", 'https://js.stripe.com', ...scriptSrcUrls],
+//       styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+//       workerSrc: ["'self'", 'blob:'],
+//       objectSrc: [],
+//       imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
+//       fontSrc: ["'self'", ...fontSrcUrls],
+//       frameSrc: ["'self'", 'https://js.stripe.com'],
+//     },
+//   }),
+// );
+app.use(helmet());
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {
@@ -86,6 +87,12 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again in an hour!',
 });
 app.use('/api', limiter);
+
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout,
+);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
